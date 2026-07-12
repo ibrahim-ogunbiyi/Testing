@@ -1,4 +1,5 @@
 import streamlit as st
+import time
 
 # Set page configuration for a better layout
 st.set_page_config(
@@ -74,18 +75,16 @@ neutral_form = "https://forms.office.com/pages/responsepage.aspx?id=DQSIkWdsW0yx
 
 form_links = [positive_form, negative_form, neutral_form]
 
-# Create a global counter that persists across all visitors
-@st.cache_resource
-def get_assignment_tracker():
-    return {"current_index": 0}
-
-tracker = get_assignment_tracker()
-
-# Assign the link sequentially to guarantee equal groups
+# Cloud-Safe Time-Based Assignment
 if 'assigned_link' not in st.session_state:
-    form_index = tracker["current_index"] % 3
+    # Grab the current time in milliseconds
+    current_time_ms = int(time.time() * 1000)
+    
+    # Use modulo 3 to divide the milliseconds evenly into 0, 1, or 2
+    form_index = current_time_ms % 3
+    
+    # Assign the link and save it to the user's session
     st.session_state.assigned_link = form_links[form_index]
-    tracker["current_index"] += 1
 
 st.divider()
 
@@ -93,7 +92,6 @@ st.divider()
 if consent:
     st.success("Thank you for your consent. Please click the button below to proceed to the survey. The survey will open in a new tab.")
     
-    # Center the button using columns to make it look nicer
     col1, col2, col3 = st.columns([1, 2, 1])
     with col2:
         st.link_button("Start Survey", st.session_state.assigned_link, use_container_width=True)
