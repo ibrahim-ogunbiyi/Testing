@@ -221,12 +221,24 @@ def display_assigned_survey():
         "Complete and submit the questionnaire only once."
     )
 
-    st.link_button(
-        "Open My Assigned Survey",
-        assigned_form,
-        type="primary",
-        use_container_width=True
-    )
+    col1, col2 = st.columns([3,1])
+
+    with col1:
+        st.link_button(
+            "Open My Assigned Survey",
+            assigned_form,
+            type="primary",
+            use_container_width=True,
+        )
+    
+    with col2:
+        if st.button("🏠", use_container_width=True):
+            st.query_params.clear()
+    
+            for key in list(st.session_state.keys()):
+                del st.session_state[key]
+    
+            st.rerun()
 
     st.caption(
         "Opening the questionnaire does not automatically submit a response. "
