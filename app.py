@@ -359,6 +359,14 @@ with st.form("participant_access_form"):
         )
     )
 
+    st.info(
+         """
+        🔒 **Privacy Notice**
+
+        Your email address is **never stored**. It is securely converted into a unique hash that is used only to prevent duplicate participation and restore your assigned survey. Your survey responses remain anonymous.
+        """
+    )
+
     st.markdown("### Informed consent")
 
     consent = st.checkbox(
